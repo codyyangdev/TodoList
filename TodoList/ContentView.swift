@@ -33,8 +33,16 @@ struct ContentView: View {
                 }
                 .padding()
                 
+                Picker("过滤", selection: $viewModel.currentFilter) {
+                    Text("全部").tag(TodoViewModel.FilterOption.all)
+                    Text("已完成").tag(TodoViewModel.FilterOption.completed)
+                    Text("未完成").tag(TodoViewModel.FilterOption.incomplete)
+                }
+                .pickerStyle(SegmentedPickerStyle())
+                .padding(.horizontal)
+                
                 List {
-                    ForEach(viewModel.todos) { todo in
+                    ForEach(viewModel.filteredTodos) { todo in
                         HStack {
                             Image(systemName: todo.isCompleted ? "checkmark.circle.fill" : "circle")
                                 .foregroundColor(todo.isCompleted ? .green : .gray)
@@ -50,6 +58,11 @@ struct ContentView: View {
                 }
             }
             .navigationTitle("待办事项")
+            .alert("错误", isPresented: $showingError) {
+                Button("确定", role: .cancel) { }
+            } message: {
+                Text(errorMessage)
+            }
         }
     }
 }

@@ -71,6 +71,49 @@ final class TodoViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.todos[0].title, "测试项目1")
         XCTAssertEqual(viewModel.todos[1].title, "测试项目2")
     }
+    
+    // MARK: - 过滤功能测试
+    
+    func testFilterAll() {
+        // Given
+        viewModel.addTodo(title: "已完成项目")
+        viewModel.addTodo(title: "未完成项目")
+        viewModel.toggleTodoCompletion(todo: viewModel.todos[0])
+        
+        // When
+        viewModel.currentFilter = .all
+        
+        // Then
+        XCTAssertEqual(viewModel.filteredTodos.count, 2)
+    }
+    
+    func testFilterCompleted() {
+        // Given
+        viewModel.addTodo(title: "已完成项目")
+        viewModel.addTodo(title: "未完成项目")
+        viewModel.toggleTodoCompletion(todo: viewModel.todos[0])
+        
+        // When
+        viewModel.currentFilter = .completed
+        
+        // Then
+        XCTAssertEqual(viewModel.filteredTodos.count, 1)
+        XCTAssertEqual(viewModel.filteredTodos[0].title, "已完成项目")
+    }
+    
+    func testFilterIncomplete() {
+        // Given
+        viewModel.addTodo(title: "已完成项目")
+        viewModel.addTodo(title: "未完成项目")
+        viewModel.toggleTodoCompletion(todo: viewModel.todos[0])
+        
+        // When
+        viewModel.currentFilter = .incomplete
+        
+        // Then
+        XCTAssertEqual(viewModel.filteredTodos.count, 1)
+        XCTAssertEqual(viewModel.filteredTodos[0].title, "未完成项目")
+    }
 }
 
 // MARK: - Mock Service

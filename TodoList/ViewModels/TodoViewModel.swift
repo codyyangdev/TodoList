@@ -7,6 +7,16 @@ class TodoViewModel: ObservableObject {
     /// 待办事项列表，使用 @Published 属性包装器实现数据绑定
     @Published var todos: [Todo] = []
     
+    /// 过滤选项
+    enum FilterOption {
+        case all
+        case completed
+        case incomplete
+    }
+    
+    /// 当前过滤选项
+    @Published var currentFilter: FilterOption = .all
+    
     /// 待办事项服务实例
     private let todoService: TodoServiceProtocol
     
@@ -49,5 +59,17 @@ class TodoViewModel: ObservableObject {
     /// 保存待办事项到持久化存储
     private func saveTodos() {
         todoService.saveTodos(todos)
+    }
+    
+    /// 根据当前过滤选项获取过滤后的待办事项列表
+    var filteredTodos: [Todo] {
+        switch currentFilter {
+        case .all:
+            return todos
+        case .completed:
+            return todos.filter { $0.isCompleted }
+        case .incomplete:
+            return todos.filter { !$0.isCompleted }
+        }
     }
 } 
