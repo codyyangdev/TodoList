@@ -3,6 +3,8 @@ import SwiftUI
 
 /// 待办事项视图模型
 /// 负责处理待办事项的业务逻辑和数据管理
+/// 使用 @Published 属性包装器实现数据绑定
+/// 使用 @StateObject 属性包装器实现视图模型实例的声明周期管理
 class TodoViewModel: ObservableObject {
     /// 待办事项列表，使用 @Published 属性包装器实现数据绑定
     @Published var todos: [Todo] = []
